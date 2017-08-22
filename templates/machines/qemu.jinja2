@@ -1,0 +1,6 @@
+{%- extends 'boot/generic-uboot-tftp.jinja2' %}
+{%- set kernel_image = "vmlinux" %}
+{%- set kernel_cmdline = "console=ttyS0,115200 root=/dev/hda debug verbose" %}
+{%- set qemu_args = "-cpu qemu64,+ssse3,+sse4.1,+sse4.2,+popcnt -m 1048 -soundhw hda" %}
+{%- set deploy_to = "tmpfs" %}
+{%- set boot_method = "qemu" %}
