@@ -1,0 +1,36 @@
+{%- extends 'base/agl-base-defaults.jinja2' %}
+{%- block job %}
+{%- block metadata %}
+metadata:
+  image.type: 'AGL'
+{% endblock %}
+{%- block main %}
+device_type: {{ device_type }}
+job_name: {{ name }}
+
+timeouts:
+  job:
+    minutes: {{ job_timeout }}
+  action:
+    minutes: {{ action_timeout }}
+  connection:
+    minutes: {{ connection_timeout }}
+priority: {{ priority }}
+visibility: public
+{% endblock %}
+{%- block actions %}
+actions:
+{%- block deploy %}
+- deploy:
+    timeout:
+      minutes: {{ deploy_timeout }}
+{%- endblock %}
+{%- block boot %}
+{% endblock %}
+{%- block tests %}
+{%-for test_template in test_templates %}
+{% include test_template %}
+{%- endfor %}
+{% endblock %}
+{% endblock %}
+{% endblock %}

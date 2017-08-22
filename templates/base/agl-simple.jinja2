@@ -1,0 +1,7 @@
+{%- extends 'base/agl-base.jinja2' %}
+{%- block deploy -%}
+{{ super() }}
+    to: {{ deploy_to|default("tftp") }}
+    os: {{ deploy_os|default("oe") }}
+    failure_retry: 2
+{%- endblock %}

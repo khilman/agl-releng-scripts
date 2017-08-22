@@ -1,0 +1,40 @@
+{%- macro baseurl(object) -%}
+{{ urlbase }}/{{ dl_dir }}/{{ object }}
+{%- endmacro %}
+{%- set dl_dir = dl_dir|default(yocto_machine) %}
+{%- set boot_timeout = boot_timeout|default(10) %}
+{%- set job_timeout = job_timeout|default(30) %}
+{%- set action_timeout = action_timeout|default(15) %}
+{%- set connection_timeout = connection_timeout|default(5) %}
+{%- set deploy_timeout = deploy_timeout|default(15) %}
+{%- set device_type = device_type|default(yocto_machine+"-uboot") %}
+{%- set kernel_image = kernel_image|default('uImage') %}
+{%- set kernel_url = kernel_url|default(baseurl(kernel_image)) %}
+{%- if dtb %}
+{%- set dtb_url = dtb_url|default(baseurl(dtb)) %}
+{%- endif %}
+{%- if modules %}
+{%- set modules_url = modules_url|default(baseurl(modules)) %}
+{%- set modules_compression = modules_compression|default(modules|get_extension) %}
+{%- endif %}
+{%- if rootfs_type == 'nbd' %}
+{%- set deploy_to = "nbd" %}
+{%- set boot_commands = "nbd" %}
+{%- set nbdroot = nbdroot|default("core-image-minimal-" + yocto_machine + ".ext4.xz") %}
+{%- set nbdroot_url = nbdroot_url|default(baseurl(nbdroot)) %}
+{%- set nbdroot_compression = nbdroot_compression|default(nbdroot|get_extension) %}
+{%- set nbdinitrd = nbdinitrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz") %}
+{%- set nbdinitrd_url = nbdinitrd_url|default(baseurl(nbdinitrd)) %}
+{%- elif rootfs_type == 'nfs' %}
+{%- set nfsrootfs = nfsrootfs|default("nfsrootfs-" + yocto_machine + ".tar.gz") %}
+{%- set nfsrootfs_url = nfsrootfs_url|default(baseurl(nfsrootfs)) %}
+{%- set nfsroot_compression = nfsroot_compression|default(nfsrootfs|get_extension) %}
+{%- elif rootfs_type == 'ramdisk' %}
+{%- set initrd = initrd|default("initramfs-boot-image-" + yocto_machine +".gz") %}
+{%- set initrd_compression = initrd_compression|default(initrd|get_extension) %}
+{%- endif %}
+{%- if initrd %}
+{%- set initrd_url = initrd_url|default(baseurl(initrd)) %}
+{%- endif %}
+{%- block job %}
+{%- endblock %}
