@@ -13,7 +13,7 @@ protocols:
     timeout:
       minutes: {{ boot_timeout }}
     method: {{ boot_method|default("u-boot") }}
-    type: {{ boot_type|default("booti") }}
+    type: {{ uboot_type|default("bootm") }}
     commands: {{ boot_commands|default("ramdisk") }}
     prompts:
       - 'root@{{ yocto_machine }}:~'
