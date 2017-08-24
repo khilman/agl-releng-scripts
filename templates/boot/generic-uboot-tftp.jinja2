@@ -15,11 +15,5 @@ protocols:
     method: {{ boot_method|default("u-boot") }}
     type: {{ uboot_type|default("bootm") }}
     commands: {{ boot_commands|default("ramdisk") }}
-    prompts:
-      - 'root@{{ yocto_machine }}:~'
-      - 'root@debian:~#'
-      - '/ #'
-    auto_login:
-      login_prompt: "login:"
-      username: root
+{%- include 'boot/agl-prompt.jinja' %}
 {%- endblock %}
