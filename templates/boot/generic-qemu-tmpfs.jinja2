@@ -1,0 +1,13 @@
+{%- extends 'boot/generic-base-boot.jinja2' %}
+{%- set boot_method = "qemu" %}
+{%- block boot %}
+{{ super() }}
+    media: {{ media_type|default("tmpfs") }}
+{%- endblock %}
+{%- block main %}
+{{ super() }}
+context:
+    no_kvm: false
+    arch: {{ qemu_arch }}
+    extra_options: ["{{ qemu_args }}"]
+{% endblock %}

@@ -1,19 +1,7 @@
-{%- extends 'base/agl-simple.jinja2' %}
-{%- block main %}
-{{ super() }}
-{%- if rootfs_type == 'nbd' %}
-protocols:
-  lava-xnbd:
-    port: auto
-{%- endif %}
-{% endblock %}
+{%- extends 'boot/generic-base-boot.jinja2' %}
+{%- set boot_method = "u-boot" %}
 {%- block boot %}
 {{ super() }}
-- boot:
-    timeout:
-      minutes: {{ boot_timeout }}
-    method: {{ boot_method|default("u-boot") }}
     type: {{ uboot_type|default("bootm") }}
     commands: {{ boot_commands|default("ramdisk") }}
-{%- include 'boot/agl-prompt.jinja' %}
 {%- endblock %}
