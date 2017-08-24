@@ -16,6 +16,8 @@
 {%- set modules_url = modules_url|default(baseurl(modules)) %}
 {%- endif %}
 {%- if rootfs_type == 'nbd' %}
+{%- set deploy_to = "nbd" %}
+{%- set boot_commands = "nbd" %}
 {%- set nbdroot = nbdroot|default("agl-demo-platform-" + yocto_machine + ".ext4.xz") %}
 {%- set nbdroot_url = nbdroot_url|default(baseurl(nbdroot)) %}
 {%- set nbdinitrd = nbdinitrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz.u-boot") %}
