@@ -1,6 +1,11 @@
 {%- macro baseurl(object) -%}
 {{urlbase}}/{{object}}
 {%- endmacro %}
+{%- set boot_timeout = boot_timeout|default(10) %}
+{%- set job_timeout = job_timeout|default(30) %}
+{%- set action_timeout = action_timeout|default(15) %}
+{%- set connection_timeout = connection_timeout|default(5) %}
+{%- set deploy_timeout = deploy_timeout|default(15) %}
 {%- set device_type = device_type|default(yocto_machine+"-uboot") %}
 {%- set kernel_image = kernel_image|default('Image') %}
 {%- set kernel_url = kernel_url|default(baseurl(kernel_image)) %}

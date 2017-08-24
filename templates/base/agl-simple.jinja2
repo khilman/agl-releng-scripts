@@ -1,7 +1,6 @@
 {%- extends 'base/agl-base.jinja2' %}
 {%- block deploy -%}
 {{ super() }}
-- deploy:
     to: {{ deploy_to|default("tftp") }}
     kernel:
       url: {{ kernel_url }}

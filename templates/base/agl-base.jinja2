@@ -6,20 +6,25 @@ metadata:
 {% endblock %}
 {%- block main %}
 device_type: {{ device_type }}
-
 job_name: {{ name }}
+
 timeouts:
   job:
-    minutes: 30
+    minutes: {{ job_timeout }}
   action:
-    minutes: 15
+    minutes: {{ action_timeout }}
+  connection:
+    minutes: {{ connection_timeout }}
 priority: {{ priority }}
 visibility: public
 {% endblock %}
 {%- block actions %}
 actions:
 {%- block deploy %}
-{% endblock %}
+- deploy:
+    timeout:
+      minutes: {{ deploy_timeout }}
+{%- endblock %}
 {%- block boot %}
 {% endblock %}
 {%- block tests %}
