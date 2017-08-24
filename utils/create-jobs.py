@@ -20,7 +20,7 @@ def parse_cmdline(machines, tests):
                         default='medium')
     parser.add_argument('--urlbase', '-u', action='store', dest='urlbase',
                         help='url fetch base',
-                        default='http://www.baylibre.com/pub/agl/ci')
+                        default='https://download.automotivelinux.org/AGL/upload/ci')
     parser.add_argument('--id', '-i', action='store', dest='identifier',
                         help='id suffix',
                         default=None)
