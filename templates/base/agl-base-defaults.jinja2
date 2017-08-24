@@ -7,7 +7,7 @@
 {%- set connection_timeout = connection_timeout|default(5) %}
 {%- set deploy_timeout = deploy_timeout|default(15) %}
 {%- set device_type = device_type|default(yocto_machine+"-uboot") %}
-{%- set kernel_image = kernel_image|default('Image') %}
+{%- set kernel_image = kernel_image|default('uImage') %}
 {%- set kernel_url = kernel_url|default(baseurl(kernel_image)) %}
 {%- if dtb %}
 {%- set dtb_url = dtb_url|default(baseurl(dtb)) %}
