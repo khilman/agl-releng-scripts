@@ -55,7 +55,10 @@ def main():
     job['yocto_machine'] = args.machine
     job['priority'] = args.priority
     job['urlbase'] = args.urlbase
-    job['test_templates'] =  [ os.path.join('tests', t + '.jinja2') for t in args.tests ]
+
+    if args.tests is not None:
+        job['test_templates'] =  [ os.path.join('tests', t + '.jinja2') for t in args.tests ]
+
     if args.rfs_type is not None:
         job['rootfs_type'] = args.rfs_type
 
