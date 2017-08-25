@@ -1,0 +1,26 @@
+{%- extends 'boot/generic-base-boot.jinja2' %}
+{%- set boot_method = "qemu" %}
+{%- block boot %}
+{{ super() }}
+    media: {{ media_type|default("tmpfs") }}
+{%- endblock %}
+{%- block main %}
+{{ super() }}
+context:
+    no_kvm: false
+    arch: {{ qemu_arch }}
+    extra_options: ["{{ qemu_args }}"]
+{% endblock %}
+{%- block deploy -%}
+{{ super() }}
+    images:
+        kernel:
+           image_arg: '-kernel {kernel} -append "{{ qemu_cmdline }}"'
+           url: {{ kernel_url }}
+{%- if initrd_url and rootfs_type == 'ramdisk' %}
+        ramdisk:
+           image_arg: '-drive format=raw,file={ramdisk}'
+           url: {{ initrd_url }}
+           compression: {{ initrd_compression }}
+{%- endif %}
+{%- endblock %}

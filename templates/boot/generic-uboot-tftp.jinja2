@@ -1,4 +1,5 @@
-{%- extends 'base/agl-simple.jinja2' %}
+{%- extends 'boot/generic-base-boot.jinja2' %}
+{%- set boot_method = "u-boot" %}
 {%- block main %}
 {{ super() }}
 {%- if rootfs_type == 'nbd' %}
@@ -6,20 +7,40 @@ protocols:
   lava-xnbd:
     port: auto
 {%- endif %}
-{%- endblock %}
+{% endblock %}
 {%- block boot %}
 {{ super() }}
-- boot:
-    timeout:
-      minutes: 10
-    method: {{ boot_method|default("u-boot") }}
-    type: {{ boot_type|default("booti") }}
+    type: {{ uboot_type|default("bootm") }}
     commands: {{ boot_commands|default("ramdisk") }}
-    prompts:
-      - 'root@{{ yocto_machine }}:~'
-      - 'root@debian:~#'
-      - '/ #'
-    auto_login:
-      login_prompt: "login:"
-      username: root
+{%- endblock %}
+{%- block deploy -%}
+{{ super() }}
+    kernel:
+      url: {{ kernel_url }}
+{%- if rootfs_type == 'nfs' %}
+    nfsrootfs:
+      url: {{ nfsrootfs_url }}
+      compression: {{ nfsroot_compression }}
+{%- elif rootfs_type == 'nbd' %}
+    initrd:
+      url: {{ nbdinitrd_url }}
+      allow_modify: false
+    nbdroot:
+      url: {{ nbdroot_url }}
+      compression: {{ nbdroot_compression }}
+{%- endif %}
+{%- if initrd_url and rootfs_type != 'nbd' %}
+    ramdisk:
+      url: {{ initrd_url }}
+      compression: {{ initrd_compression }}
+{%- endif %}
+{%- if modules_url %}
+    modules:
+      url: {{ modules_url }}
+      compression: {{ modules_compression }}
+{%- endif %}
+{%- if dtb_url %}
+    dtb:
+      url: {{ dtb_url }}
+{%- endif %}
 {%- endblock %}
