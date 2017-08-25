@@ -51,7 +51,7 @@ class Agljobtemplate(object):
 
         for t in tests:
             if t in self.tests:
-                test.templates.append(os.path.join(self.TESTS_DIR, t + '.jinja2'))
+                test_templates.append(os.path.join(self.TESTS_DIR, t + '.jinja2'))
             else:
                 raise RuntimeError, "{} is not an available test".format(t)
 
