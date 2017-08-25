@@ -1,6 +1,7 @@
 {%- macro baseurl(object) -%}
-{{urlbase}}{{object}}
+{{ urlbase }}/{{ dl_dir }}/{{ object }}
 {%- endmacro %}
+{%- set dl_dir = dl_dir|default(yocto_machine) %}
 {%- set boot_timeout = boot_timeout|default(10) %}
 {%- set job_timeout = job_timeout|default(30) %}
 {%- set action_timeout = action_timeout|default(15) %}
