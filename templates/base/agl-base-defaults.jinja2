@@ -1,5 +1,5 @@
 {%- macro baseurl(object) -%}
-{{urlbase}}/{{object}}
+{{urlbase}}{{object}}
 {%- endmacro %}
 {%- set boot_timeout = boot_timeout|default(10) %}
 {%- set job_timeout = job_timeout|default(30) %}

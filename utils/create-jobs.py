@@ -1,16 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+import agljobtemplate
 import argparse
-import os
-import sys
-import jinja2
-import random
-import string
+import urlparse
 
-template_directory = 'templates'
-
-def parse_cmdline(machines, tests):
+def parse_cmdline(machines, tests, rfs_types):
     parser = argparse.ArgumentParser(description="AGL create job")
     parser.add_argument('--version', "-v", action='version', version='%(prog)s 1.0')
     parser.add_argument('machine',  action='store', choices=machines,
@@ -20,66 +15,50 @@ def parse_cmdline(machines, tests):
                         default='medium')
     parser.add_argument('--urlbase', '-u', action='store', dest='urlbase',
                         help='url fetch base',
-                        default='https://download.automotivelinux.org/AGL/upload/ci')
-    parser.add_argument('--id', '-i', action='store', dest='identifier',
-                        help='id suffix',
-                        default=None)
-    parser.add_argument('--boot', action='store', dest='rfs_type',
-                         choices=['nfs', 'nbd', 'ramdisk'], help='select boot type')
-    parser.add_argument('--test', dest='tests',  action='store', choices=tests,
-                        help='add these test to the job', nargs='*')
+                        default='https://download.automotivelinux.org/AGL/upload/ci/')
+    parser.add_argument('--boot', action='store', dest='rfs_type', nargs = 1,
+                        choices=rfs_types, help='select boot type')
+    parser.add_argument('--test', dest='tests',  action='store', choices=tests + ["all"],
+                        help='add these test to the job', nargs='*', default = [])
+    parser.add_argument('-o', '--output', dest='job_file',  action='store',
+                        help='destination file')
+    parser.add_argument('-n', '--name', dest='job_name',  action='store',
+                        help='job name', default = "AGL-short-smoke-wip")
+    parser.add_argument('-j', '--jobid', dest='job_id',  action='store',
+                        help='job id')
+    parser.add_argument('-i', '--jobidx', dest='job_index',  action='store',
+                        help='job index')
     return parser.parse_args()
 
-def list_available_jinjas(d):
-    if not (os.path.isdir(d) and os.access(d, os.F_OK)):
-        return []
-    l = [ os.path.splitext(os.path.basename(f))[0] for f in os.listdir(d) if f.endswith('.jinja2') ]
-    return l
-
 def main():
-    machines = list_available_jinjas(os.path.join(template_directory, "machines"))
-    tests = list_available_jinjas(os.path.join(template_directory, "tests"))
-    alltests = list(tests)
-    alltests.append('all')
-    args = parse_cmdline(machines, alltests)
+    ajt = agljobtemplate.Agljobtemplate("templates")
+    args = parse_cmdline(ajt.machines, ajt.tests, ajt.rfs_types)
 
     if args.tests is not None and 'all' in args.tests:
-        args.tests = tests
+        args.tests = ajt.tests
 
-    if args.identifier is None:
-        args.identifier = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+    if args.job_id is not None:
+        args.urlbase = urlparse.urljoin(args.urlbase, args.job_id + "/")
+        args.job_name += " - {}".format(args.job_id)
 
-    # Populate jinja substitution dict
-    job = {}
-    job['name'] = "AGL test template job for {} - ID {}".format(args.machine, args.identifier)
-    job['yocto_machine'] = args.machine
-    job['priority'] = args.priority
-    job['urlbase'] = args.urlbase
+        if args.job_index is not None:
+            args.urlbase = urlparse.urljoin(args.urlbase, args.job_index + "/")
+            args.job_name += " - {}".format(args.job_index)
 
-    if args.tests is not None:
-        job['test_templates'] =  [ os.path.join('tests', t + '.jinja2') for t in args.tests ]
+    job = ajt.render_job(args.urlbase, args.machine, tests = args.tests, priority = args.priority,
+                         rfs_type = args.rfs_type[0], job_name = args.job_name)
 
-    if args.rfs_type is not None:
-        job['rootfs_type'] = args.rfs_type
-
-    job_file = "agl-test-{}".format(args.machine)
-    if args.identifier != '':
-        job_file += "-" + args.identifier
-    job_file += ".yaml"
-    template_file = os.path.join("machines", args.machine + ".jinja2")
-
-    # Maybe the template directory should be an argument too
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_directory))
-    template = env.get_template(template_file )
-
-    try:
-        with open(os.path.abspath(job_file), 'w') as j:
-            j.write(template.render(job))
-    except IOError as e:
-        print "{}: {}".format(e.strerror, cfgpath)
-        exit(e.errno)
+    if args.job_file is None:
+        print job
     else:
-        print "Job written to: {}".format(os.path.relpath(job_file))
+        try:
+            with open(args.job_file, 'w') as j:
+                j.write(job)
+        except IOError as e:
+            print "{}: {}".format(e.strerror, args.job_file)
+            exit(e.errno)
+        else:
+            print "Job written to: {}".format(args.job_file)
 
 if __name__ == '__main__':
     main()
