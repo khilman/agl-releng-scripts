@@ -15,7 +15,7 @@ context:
 {{ super() }}
     images:
         kernel:
-           image_arg: '-kernel {kernel} -append {{ qemu_cmdline }}'
+           image_arg: '-kernel {kernel} -append "{{ qemu_cmdline }}"'
            url: {{ kernel_url }}
 {%- if initrd_url and rootfs_type == 'ramdisk' %}
         ramdisk:
