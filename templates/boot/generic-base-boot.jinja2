@@ -1,12 +1,4 @@
 {%- extends 'base/agl-simple.jinja2' %}
-{%- block main %}
-{{ super() }}
-{%- if rootfs_type == 'nbd' %}
-protocols:
-  lava-xnbd:
-    port: auto
-{%- endif %}
-{% endblock %}
 {%- block boot %}
 {{ super() }}
 - boot:
