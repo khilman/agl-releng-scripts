@@ -34,7 +34,7 @@
 {%- set initrd_compression = initrd_compression|default(initrd|get_extension) %}
 {%- endif %}
 {%- if initrd %}
-{%- set initrd_url = initrd_url|default(baseurl(nfsrootfs)) %}
+{%- set initrd_url = initrd_url|default(baseurl(initrd)) %}
 {%- endif %}
 {%- block job %}
 {%- endblock %}
