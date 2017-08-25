@@ -19,10 +19,10 @@
 {%- if rootfs_type == 'nbd' %}
 {%- set deploy_to = "nbd" %}
 {%- set boot_commands = "nbd" %}
-{%- set nbdroot = nbdroot|default("agl-demo-platform-" + yocto_machine + ".ext4.xz") %}
+{%- set nbdroot = nbdroot|default("core-image-minimal-" + yocto_machine + ".ext4.xz") %}
 {%- set nbdroot_url = nbdroot_url|default(baseurl(nbdroot)) %}
 {%- set nbdroot_compression = nbdroot_compression|default(nbdroot|get_extension) %}
-{%- set nbdinitrd = nbdinitrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz.u-boot") %}
+{%- set nbdinitrd = nbdinitrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz") %}
 {%- set nbdinitrd_url = nbdinitrd_url|default(baseurl(nbdinitrd)) %}
 {%- elif rootfs_type == 'nfs' %}
 {%- set nfsrootfs = nfsrootfs|default("nfsrootfs-" + yocto_machine + ".tar.gz") %}
