@@ -7,24 +7,24 @@
 {%- if rootfs_type == 'nfs' %}
     nfsrootfs:
       url: {{ nfsrootfs_url }}
-      compression: xz
+      compression: {{ nfsroot_compression }}
 {%- elif rootfs_type == 'nbd' %}
     initrd:
       url: {{ nbdinitrd_url }}
       allow_modify: false
     nbdroot:
       url: {{ nbdroot_url }}
-      compression: xz
+      compression: {{ nbdroot_compression }}
 {%- endif %}
 {%- if initrd_url and rootfs_type != 'nbd' %}
     ramdisk:
       url: {{ initrd_url }}
-      compression: gz
+      compression: {{ initrd_compression }}
 {%- endif %}
 {%- if modules_url %}
     modules:
       url: {{ modules_url }}
-      compression: xz
+      compression: {{ modules_compression }}
 {%- endif %}
 {%- if dtb_url %}
     dtb:

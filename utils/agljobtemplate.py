@@ -5,6 +5,9 @@ import os
 import sys
 import jinja2
 
+def get_extension(path):
+    return path.split('.')[-1]
+
 class Agljobtemplate(object):
 
     DEFAULT_PATH = "templates"
@@ -62,6 +65,7 @@ class Agljobtemplate(object):
         job['rootfs_type'] = rfs_type
 
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(self._template_path))
+        env.filters['get_extension'] = get_extension
         template = env.get_template(os.path.join(self.MACHINES_DIR, machine + ".jinja2"))
 
         return template.render(job)
