@@ -44,7 +44,7 @@ def main():
         args.job_name += ' - {}'.format(args.job_id)
 
         if args.job_index is not None:
-            args.urlbase = urlparse.urljoin(args.urlbase, args.job_index + '/')
+            args.urlbase = urlparse.urljoin(args.urlbase, args.job_index)
             args.job_name += ' - {}'.format(args.job_index)
 
     job = ajt.render_job(args.urlbase, args.machine, tests = args.tests, priority = args.priority,
