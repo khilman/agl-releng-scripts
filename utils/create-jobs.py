@@ -6,7 +6,8 @@ import argparse
 import urlparse
 
 def parse_cmdline(machines, tests, rfs_types):
-    parser = argparse.ArgumentParser(description="AGL create job")
+    parser = argparse.ArgumentParser(description="AGL create job",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--version', '-v', action='version', version='%(prog)s 1.0')
     parser.add_argument('machine',  action='store', choices=machines,
                         help="machine to generate the job for")
