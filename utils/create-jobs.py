@@ -18,8 +18,8 @@ def parse_cmdline(machines, tests, rfs_types):
     parser.add_argument('--urlbase', '-u', action='store', dest='urlbase',
                         help="url fetch base",
                         default='https://download.automotivelinux.org/AGL/upload/ci/')
-    parser.add_argument('--boot', action='store', dest='rfs_type', nargs=1,
-                        choices=rfs_types, help='select boot type', default='ramdisk')
+    parser.add_argument('--boot', action='store', dest='rfs_type', nargs=1, required=True,
+                        choices=rfs_types, help='select boot type')
     parser.add_argument('--test', dest='tests',  action='store', choices=tests + ['all'],
                         help="add these test to the job", nargs='*', default=[])
     parser.add_argument('-o', '--output', dest='job_file',  action='store',
