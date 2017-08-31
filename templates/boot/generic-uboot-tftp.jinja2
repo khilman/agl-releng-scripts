@@ -12,6 +12,11 @@ protocols:
 {{ super() }}
     type: {{ uboot_type|default("bootm") }}
     commands: {{ boot_commands|default("ramdisk") }}
+{%- if rootfs_type == 'nbd' %}
+    transfer_overlay:
+      download_command: wget
+      unpack_command: tar -C / -xvpf
+{%- endif %}
 {%- endblock %}
 {%- block deploy -%}
 {{ super() }}
