@@ -16,7 +16,7 @@ def parse_cmdline(machines, tests, rfs_types):
     parser.add_argument('--urlbase', '-u', action='store', dest='urlbase',
                         help='url fetch base',
                         default='https://download.automotivelinux.org/AGL/upload/ci/')
-    parser.add_argument('--boot', action='store', dest='rfs_type', nargs = 1,
+    parser.add_argument('--boot', action='store', dest='rfs_type',
                         choices=rfs_types, help='select boot type')
     parser.add_argument('--test', dest='tests',  action='store', choices=tests + ["all"],
                         help='add these test to the job', nargs='*', default = [])
@@ -46,7 +46,7 @@ def main():
             args.job_name += " - {}".format(args.job_index)
 
     job = ajt.render_job(args.urlbase, args.machine, tests = args.tests, priority = args.priority,
-                         rfs_type = args.rfs_type[0], job_name = args.job_name)
+                         rfs_type = args.rfs_type, job_name = args.job_name)
 
     if args.job_file is None:
         print job
