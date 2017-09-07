@@ -2,17 +2,31 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 import jinja2
+import ConfigParser
 
 
 def get_extension(path):
     return path.split('.')[-1]
 
 
+def parse_callback_file(template_path, callback_file, job):
+    callback_file_path = template_path + '/callback/' + callback_file + '.cfg'
+    try:
+        with open(callback_file_path):
+            cfg = ConfigParser.ConfigParser()
+            cfg.read(callback_file_path)
+            job['backend_fqdn'] = cfg.get('default', 'backend_fqdn')
+            job['lab_name'] = cfg.get('default', 'lab_name')
+            job['lab_token'] = cfg.get('default', 'lab_token')
+    except IOError:
+        raise IOError, "Unable to read from file {}".format(callback_file_path)
+
+
 class Agljobtemplate(object):
 
     DEFAULT_PATH = "templates"
+    CALLBACK_DIR = "callback"
     MACHINES_DIR = "machines"
     TESTS_DIR = "tests"
     RFS_TYPE = ['nfs', 'nbd', 'ramdisk']
@@ -45,7 +59,8 @@ class Agljobtemplate(object):
     def rfs_types(self):
         return self.RFS_TYPE
 
-    def render_job(self, url, machine, job_name="AGL-short-smoke", priority="medium", tests=[], rfs_type="nbd"):
+    def render_job(self, url, machine, rfs_type, job_name="AGL-short-smoke", priority="medium", tests=[],
+                   kci_callback=None):
         test_templates = []
 
         if machine not in self.machines:
@@ -65,6 +80,13 @@ class Agljobtemplate(object):
         job['urlbase'] = url
         job['test_templates'] = test_templates
         job['rootfs_type'] = rfs_type
+
+        if kci_callback:
+            if test_templates:
+                job['callback_name'] = 'lava/test'
+            else:
+                job['callback_name'] = 'lava/boot'
+            parse_callback_file(self._template_path, kci_callback, job)
 
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(self._template_path))
         env.filters['get_extension'] = get_extension

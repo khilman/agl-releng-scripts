@@ -20,6 +20,8 @@ def parse_cmdline(machines, tests, rfs_types):
                         default='https://download.automotivelinux.org/AGL/upload/ci/')
     parser.add_argument('--boot', action='store', dest='rfs_type', nargs=1, required=True,
                         choices=rfs_types, help='select boot type')
+    parser.add_argument('--callback', action='store', dest='callback',
+                        help='url to notify when job is done. Please read: templates/callback/callback_readme.txt')
     parser.add_argument('--test', dest='tests',  action='store', choices=tests + ['all'],
                         help="add these test to the job", nargs='*', default=[])
     parser.add_argument('-o', '--output', dest='job_file',  action='store',
@@ -50,7 +52,7 @@ def main():
             args.job_name += ' - {}'.format(args.job_index)
 
     job = ajt.render_job(args.urlbase, args.machine, tests=args.tests, priority=args.priority,
-                         rfs_type=args.rfs_type[0], job_name=args.job_name)
+                         rfs_type=args.rfs_type[0], job_name=args.job_name, kci_callback=args.callback)
 
     if args.job_file is None:
         print job
