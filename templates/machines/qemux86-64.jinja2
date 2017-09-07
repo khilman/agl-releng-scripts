@@ -1,5 +1,6 @@
 {%- extends 'boot/generic-qemu-tmpfs.jinja2' %}
 {%- set device_type = "qemu" %}
+{%- set rootfs_type = rfs_type|default("ramdisk") %}
 {%- set kernel_image = "bzImage" %}
 {%- set qemu_cmdline = "console=ttyS0,115200 root=/dev/hda debug verbose" %}
 {%- set qemu_args = "-cpu qemu64,+ssse3,+sse4.1,+sse4.2,+popcnt -m 1048 -soundhw hda" %}

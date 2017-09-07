@@ -43,7 +43,7 @@ class Agljobtemplate(object):
     def rfs_types(self):
         return self.RFS_TYPE
 
-    def render_job(self, url, machine, job_name = "AGL-short-smoke", priority = "medium", tests = [], rfs_type = "nbd"):
+    def render_job(self, url, machine, job_name = "AGL-short-smoke", priority = "medium", tests = [], rfs_type = None):
         test_templates = []
 
         if not machine in self.machines:
@@ -62,7 +62,9 @@ class Agljobtemplate(object):
         job['priority'] = priority
         job['urlbase'] = url
         job['test_templates'] =  test_templates
-        job['rootfs_type'] = rfs_type
+
+        if rfs_type is not None:
+            job['rootfs_type'] = rfs_type
 
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(self._template_path))
         env.filters['get_extension'] = get_extension
