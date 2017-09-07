@@ -1,5 +1,6 @@
 {%- extends 'boot/generic-uboot-tftp.jinja2' %}
 {%- set device_type = "ti-vayu-uboot" %}
+{%- set rootfs_type = rootfs_type|default("nbd") %}
 {%- set dtb = "zImage-dra7-evm-lcd-lg.dtb" %}
 {%- set kernel_image = "zImage" %}
 {%- set uboot_type = "bootz" %}
