@@ -29,7 +29,7 @@ def parse_cmdline(machines, tests, rfs_types):
     parser.add_argument('-n', '--name', dest='job_name',  action='store',
                         help="job name", default='AGL-short-smoke-wip')
     parser.add_argument('-j', '--jobid', dest='job_id',  action='store',
-                        help='job id for link creation: URLBASE/JOB_ID', required=True)
+                        help='job id for link creation: URLBASE/JOB_ID')
     parser.add_argument('-i', '--jobidx', dest='job_index',  action='store',
                         help='job index for link creation: URLBASE/JOB_ID/JOB_INDEX', default='1')
 
