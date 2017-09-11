@@ -3,6 +3,9 @@
 {%- block boot %}
 {{ super() }}
     media: {{ media_type|default("tmpfs") }}
+    transfer_overlay:
+      download_command: wget
+      unpack_command: tar -C / -xvpf
 {%- endblock %}
 {%- block main %}
 {{ super() }}
