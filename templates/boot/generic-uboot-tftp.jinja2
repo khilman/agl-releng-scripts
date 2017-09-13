@@ -22,11 +22,7 @@ protocols:
 {{ super() }}
     kernel:
       url: {{ kernel_url }}
-{%- if rootfs_type == 'nfs' %}
-    nfsrootfs:
-      url: {{ nfsrootfs_url }}
-      compression: {{ nfsroot_compression }}
-{%- elif rootfs_type == 'nbd' %}
+{%- if rootfs_type == 'nbd' %}
     initrd:
       url: {{ nbdinitrd_url }}
       allow_modify: false
