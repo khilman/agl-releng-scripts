@@ -26,10 +26,6 @@
 {%- set nbdroot_compression = nbdroot_compression|default(nbdroot|get_extension) %}
 {%- set nbdinitrd = nbdinitrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz") %}
 {%- set nbdinitrd_url = nbdinitrd_url|default(baseurl(nbdinitrd)) %}
-{%- elif rootfs_type == 'nfs' %}
-{%- set nfsrootfs = nfsrootfs|default("nfsrootfs-" + yocto_machine + ".tar.gz") %}
-{%- set nfsrootfs_url = nfsrootfs_url|default(baseurl(nfsrootfs)) %}
-{%- set nfsroot_compression = nfsroot_compression|default(nfsrootfs|get_extension) %}
 {%- elif rootfs_type == 'ramdisk' %}
 {%- set initrd = initrd|default("initramfs-boot-image-" + yocto_machine +".gz") %}
 {%- set initrd_compression = initrd_compression|default(initrd|get_extension) %}
