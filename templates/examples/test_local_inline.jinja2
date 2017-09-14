@@ -1,0 +1,18 @@
+- test:
+    timeout:
+      minutes: 2
+    definitions:
+    - repository:
+        metadata:
+          name: metadataname-basictest
+          format: "Lava-Test-Shell Test Definition 1.0"
+          description: "A basic test definition."
+        run:
+          steps:
+          - lava-test-set start basic-test-set
+          - echo "Hello"
+          - lava-test-case always-pass --result pass
+          - lava-test-set stop basic-test-set
+      from: inline
+      name: test-example-basictest
+      path: inline/basictest.yaml
