@@ -29,7 +29,7 @@ class Agljobtemplate(object):
     CALLBACK_DIR = "callback"
     MACHINES_DIR = "machines"
     TESTS_DIR = "tests"
-    RFS_TYPE = ['nfs', 'nbd', 'ramdisk']
+    RFS_TYPE = ['nbd', 'ramdisk']
 
     def __init__(self, path=DEFAULT_PATH):
         self._template_path = os.path.normpath(path)
@@ -60,7 +60,7 @@ class Agljobtemplate(object):
         return self.RFS_TYPE
 
     def render_job(self, url, machine, job_name="AGL-short-smoke", priority="medium", tests=[], rfs_type=None,
-                   kci_callback=None):
+                   kci_callback=None, rfs_image=None):
         test_templates = []
 
         if machine not in self.machines:
@@ -82,6 +82,9 @@ class Agljobtemplate(object):
 
         if rfs_type is not None:
             job['rootfs_type'] = rfs_type
+
+        if rfs_image is not None:
+            job['rfs_image'] = rfs_image
 
         if kci_callback:
             if test_templates:

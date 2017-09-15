@@ -32,13 +32,26 @@ def parse_cmdline(machines, tests, rfs_types):
                         help='job id for link creation: URLBASE/JOB_ID')
     parser.add_argument('-i', '--jobidx', dest='job_index',  action='store',
                         help='job index for link creation: URLBASE/JOB_ID/JOB_INDEX', default='1')
+    parser.add_argument('--img-name', dest='img_name',  action='store',
+                        help="img base name (such as agl-demo-platform) - require img_ext")
+    parser.add_argument('--img-ext', dest='img_ext',  action='store',
+                        help="img extension (such as ext4.xz) - require img_name")
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    if (not args.img_name) != (not args.img_ext):
+        parser.error("--img-name and --img-ext require one another")
+
+    return args
 
 
 def main():
+    img = None
     ajt = agljobtemplate.Agljobtemplate('templates')
     args = parse_cmdline(ajt.machines, ajt.tests, ajt.rfs_types)
+
+    if args.img_name:
+        img = args.img_name + "-" + args.machine + "." + args.img_ext
 
     if args.tests is not None and 'all' in args.tests:
         args.tests = ajt.tests
@@ -52,7 +65,8 @@ def main():
             args.job_name += ' - {}'.format(args.job_index)
 
     job = ajt.render_job(args.urlbase, args.machine, tests=args.tests, priority=args.priority,
-                         rfs_type=args.rfs_type, job_name=args.job_name, kci_callback=args.callback)
+                         rfs_type=args.rfs_type, job_name=args.job_name, kci_callback=args.callback,
+                         rfs_image=img)
 
     if args.job_file is None:
         print job
