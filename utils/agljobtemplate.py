@@ -29,7 +29,7 @@ class Agljobtemplate(object):
     CALLBACK_DIR = "callback"
     MACHINES_DIR = "machines"
     TESTS_DIR = "tests"
-    RFS_TYPE = ['nfs', 'nbd', 'ramdisk']
+    RFS_TYPE = ['nbd', 'ramdisk']
 
     def __init__(self, path=DEFAULT_PATH):
         self._template_path = os.path.normpath(path)
