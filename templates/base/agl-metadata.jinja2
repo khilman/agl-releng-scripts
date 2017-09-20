@@ -1,0 +1,28 @@
+  image.type: 'kernel-ci'
+  image.url: FIXME
+  kernel.tree: AGL-fake-tree
+  kernel.version: AGL-fake-version
+  kernel.endian: FIXME
+  kernel.defconfig: defconfig+CONFIG_AGL=y
+  kernel.defconfig_base: defconfig
+  kernel.arch_defconfig: arm64-defconfig
+  platform.dtb: FIXME
+  platform.dtb_short: FIXME
+  platform.fastboot: FIXME
+  platform.name: {{ device_type }}
+  platform.mach: FIXME-mach
+  test.plan: boot
+  git.commit: deadbeef
+  git.describe: AGL-fake-describe
+  git.branch: FIXME
+  git.url: FIXME
+  device.type: {{ device_type }}
+  job.arch: arm64
+  job.name: {{ name }}
+  job.kernel_url: FIXME
+  job.kernel_image: FIXME
+  job.modules_url: FIXME
+  job.initrd_url: FIXME
+  job.nfsrootfs_url: FIXME
+  job.dtb_url: FIXME
+  
