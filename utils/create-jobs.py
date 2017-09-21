@@ -4,7 +4,7 @@
 import agljobtemplate
 import argparse
 import urlparse
-
+import os
 
 def parse_cmdline(machines, tests, rfs_types):
     parser = argparse.ArgumentParser(description="AGL create job",
@@ -47,7 +47,8 @@ def parse_cmdline(machines, tests, rfs_types):
 
 def main():
     img = None
-    ajt = agljobtemplate.Agljobtemplate('templates')
+    templates_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../templates')
+    ajt = agljobtemplate.Agljobtemplate(templates_dir)
     args = parse_cmdline(ajt.machines, ajt.tests, ajt.rfs_types)
 
     if args.img_name:
