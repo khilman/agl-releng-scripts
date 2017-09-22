@@ -1,38 +1,38 @@
 {%- macro baseurl(object) -%}
 {{ urlbase }}/{{ dl_dir }}/{{ object }}
 {%- endmacro %}
-{%- set dl_dir = dl_dir|default(yocto_machine) %}
-{%- set boot_timeout = boot_timeout|default(10) %}
-{%- set job_timeout = job_timeout|default(30) %}
 {%- set action_timeout = action_timeout|default(15) %}
+{%- set boot_timeout = boot_timeout|default(10) %}
 {%- set connection_timeout = connection_timeout|default(5) %}
 {%- set deploy_timeout = deploy_timeout|default(15) %}
 {%- set device_type = device_type|default(yocto_machine+"-uboot") %}
-{%- set kernel_image = kernel_image|default('uImage') %}
-{%- set kernel_url = kernel_url|default(baseurl(kernel_image)) %}
-{%- set rootfs_type = rootfs_type|default("ramdisk") %}
+{%- set dl_dir = dl_dir|default(yocto_machine) %}
 {%- set image_type = image_type|default("AGL") %}
-{%- set kernel_defconfig_base = kernel_defconfig_base|default("defconfig") %}
+{%- set job_timeout = job_timeout|default(30) %}
 {%- set kernel_defconfig = kernel_defconfig|default("defconfig+CONFIG_AGL=y") %}
+{%- set kernel_defconfig_base = kernel_defconfig_base|default("defconfig") %}
+{%- set kernel_image = kernel_image|default('uImage') %}
 {%- set kernel_tree = kernel_tree|default("AGL-kernel-tree") %}
+{%- set kernel_url = kernel_url|default(baseurl(kernel_image)) %}
 {%- set kernel_version = kernel_version|default("AGL-kernel-version") %}
+{%- set rootfs_type = rootfs_type|default("ramdisk") %}
 {%- set vcs_branch = vcs_branch|default("agl-branch") %}
 {%- set vcs_url = vcs_url|default(baseurl()) %}
 {%- if dtb %}
 {%- set dtb_url = dtb_url|default(baseurl(dtb)) %}
 {%- endif %}
 {%- if modules %}
-{%- set modules_url = modules_url|default(baseurl(modules)) %}
 {%- set modules_compression = modules_compression|default(modules|get_extension) %}
+{%- set modules_url = modules_url|default(baseurl(modules)) %}
 {%- endif %}
 {%- if rootfs_type == 'nbd' %}
-{%- set deploy_to = "nbd" %}
 {%- set boot_commands = "nbd" %}
-{%- set nbdroot = rfs_image|default("core-image-minimal-" + yocto_machine + ".ext4.xz") %}
-{%- set nbdroot_url = nbdroot_url|default(baseurl(nbdroot)) %}
-{%- set nbdroot_compression = nbdroot_compression|default(nbdroot|get_extension) %}
+{%- set deploy_to = "nbd" %}
 {%- set nbdinitrd = nbdinitrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz") %}
 {%- set nbdinitrd_url = nbdinitrd_url|default(baseurl(nbdinitrd)) %}
+{%- set nbdroot = rfs_image|default("core-image-minimal-" + yocto_machine + ".ext4.xz") %}
+{%- set nbdroot_compression = nbdroot_compression|default(nbdroot|get_extension) %}
+{%- set nbdroot_url = nbdroot_url|default(baseurl(nbdroot)) %}
 {%- elif rootfs_type == 'ramdisk' %}
 {%- set initrd = rfs_image|default("initramfs-boot-image-" + yocto_machine + ".gz") %}
 {%- set initrd_compression = initrd_compression|default(initrd|get_extension) %}

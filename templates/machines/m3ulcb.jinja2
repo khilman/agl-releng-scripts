@@ -1,7 +1,7 @@
 {%- extends 'boot/generic-uboot-tftp.jinja2' %}
 {%- set device_type = "r8a7796-m3ulcb" %}
-{%- set rootfs_type = rootfs_type|default("nbd") %}
-{%- set kernel_image = "Image" %}
-{%- set dtb = "Image-r8a7796-m3ulcb.dtb" %}
-{%- set uboot_type = "booti" %}
 {%- set dl_dir = "m3ulcb-nogfx" %}
+{%- set dtb = "Image-r8a7796-m3ulcb.dtb" %}
+{%- set kernel_image = "Image" %}
+{%- set rootfs_type = rootfs_type|default("nbd") %}
+{%- set uboot_type = "booti" %}

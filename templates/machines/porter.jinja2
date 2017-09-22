@@ -1,6 +1,6 @@
 {%- extends 'boot/generic-uboot-tftp.jinja2' %}
 {%- set device_type = "renesas-porter-uboot" %}
-{%- set rootfs_type = rootfs_type|default("nbd") %}
-{%- set nbdinitrd = "initramfs-netboot-image-" + yocto_machine +".ext4.gz.u-boot" %}
-{%- set dtb = "uImage-r8a7791-porter.dtb" %}
 {%- set dl_dir = "porter-nogfx" %}
+{%- set dtb = "uImage-r8a7791-porter.dtb" %}
+{%- set nbdinitrd = "initramfs-netboot-image-" + yocto_machine +".ext4.gz.u-boot" %}
+{%- set rootfs_type = rootfs_type|default("nbd") %}
