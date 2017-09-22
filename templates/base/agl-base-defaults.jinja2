@@ -11,6 +11,13 @@
 {%- set kernel_image = kernel_image|default('uImage') %}
 {%- set kernel_url = kernel_url|default(baseurl(kernel_image)) %}
 {%- set rootfs_type = rootfs_type|default("ramdisk") %}
+{%- set image_type = image_type|default("AGL") %}
+{%- set kernel_defconfig_base = kernel_defconfig_base|default("defconfig") %}
+{%- set kernel_defconfig = kernel_defconfig|default("defconfig+CONFIG_AGL=y") %}
+{%- set kernel_tree = kernel_tree|default("AGL-kernel-tree") %}
+{%- set kernel_version = kernel_version|default("AGL-kernel-version") %}
+{%- set vcs_branch = vcs_branch|default("agl-branch") %}
+{%- set vcs_url = vcs_url|default(baseurl()) %}
 {%- if dtb %}
 {%- set dtb_url = dtb_url|default(baseurl(dtb)) %}
 {%- endif %}

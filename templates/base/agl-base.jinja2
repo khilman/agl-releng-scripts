@@ -1,8 +1,7 @@
 {%- extends 'base/agl-base-defaults.jinja2' %}
 {%- block job %}
 {%- block metadata %}
-metadata:
-  image.type: 'AGL'
+{% include 'base/agl-metadata.jinja2' %}
 {% endblock %}
 {% if callback_name %}
 {% include 'base/agl-callback.jinja2' %}
