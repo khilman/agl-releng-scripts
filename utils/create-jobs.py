@@ -36,6 +36,8 @@ def parse_cmdline(machines, tests, rfs_types):
                         help="img base name (such as agl-demo-platform) - require img_ext")
     parser.add_argument('--img-ext', dest='img_ext',  action='store',
                         help="img extension (such as ext4.xz) - require img_name")
+    parser.add_argument('--version', dest='kernel_version',  action='store',
+                        help="the version of the AGL build.")
 
     args = parser.parse_args()
 
@@ -67,7 +69,7 @@ def main():
 
     job = ajt.render_job(args.urlbase, args.machine, tests=args.tests, priority=args.priority,
                          rfs_type=args.rfs_type, job_name=args.job_name, kci_callback=args.callback,
-                         rfs_image=img)
+                         rfs_image=img, kernel_version=args.kernel_version)
 
     if args.job_file is None:
         print job
