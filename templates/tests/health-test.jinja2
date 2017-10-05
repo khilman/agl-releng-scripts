@@ -1,0 +1,24 @@
+- test:
+    timeout:
+      minutes: 2
+    definitions:
+    - repository:
+        metadata:
+          format: Lava-Test Test Definition 1.0
+          name: inline-test
+          description: "Inline test to validate test framewrok health"
+          os:
+          - debian
+          scope:
+          - functional
+        run:
+          steps:
+          - lava-test-set start set-pass
+          - lava-test-case always-pass --shell true
+          - lava-test-set stop set-pass
+          - lava-test-set start set-fail
+          - lava-test-case always-fail --shell false
+          - lava-test-set stop set-fail
+      from: inline
+      name: health-test
+      path: inline/health-test.yaml
