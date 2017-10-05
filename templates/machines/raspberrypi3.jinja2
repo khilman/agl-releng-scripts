@@ -2,4 +2,6 @@
 {%- set device_type = "bcm2837-rpi-3-b" %}
 {%- set dtb = "uImage-bcm2710-rpi-3-b.dtb" %}
 {%- set nbdinitrd = "initramfs-netboot-image-" + yocto_machine +".ext4.gz.u-boot" %}
+{%- set device_arch = "arm64" %}
+{%- set device_mach = "broadcom" %}
 {%- set rootfs_type = rootfs_type|default("nbd") %}
