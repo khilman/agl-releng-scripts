@@ -18,27 +18,29 @@
 {%- set rootfs_type = rootfs_type|default("ramdisk") %}
 {%- set vcs_branch = vcs_branch|default("agl-branch") %}
 {%- set vcs_url = vcs_url|default(baseurl()) %}
-{%- if dtb %}
-{%- set dtb_url = dtb_url|default(baseurl(dtb)) %}
-{%- endif %}
-{%- if modules %}
-{%- set modules_compression = modules_compression|default(modules|get_extension) %}
-{%- set modules_url = modules_url|default(baseurl(modules)) %}
-{%- endif %}
+
 {%- if rootfs_type == 'nbd' %}
-{%- set boot_commands = "nbd" %}
-{%- set deploy_to = "nbd" %}
-{%- set nbdinitrd = nbdinitrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz") %}
-{%- set nbdinitrd_url = nbdinitrd_url|default(baseurl(nbdinitrd)) %}
-{%- set nbdroot = rfs_image|default("core-image-minimal-" + yocto_machine + ".ext4.xz") %}
-{%- set nbdroot_compression = nbdroot_compression|default(nbdroot|get_extension) %}
-{%- set nbdroot_url = nbdroot_url|default(baseurl(nbdroot)) %}
+    {%- set initrd = initrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz") %}
+    {%- set boot_commands = "nbd" %}
+    {%- set deploy_to = "nbd" %}
+    {%- set rootfs = rfs_image|default("core-image-minimal-" + yocto_machine + ".ext4.xz") %}
+    {%- set rootfs_compression = (rootfs|get_extension) %}
+    {%- set rootfs_url = rootfs_url|default(baseurl(rootfs)) %}
 {%- elif rootfs_type == 'ramdisk' %}
-{%- set initrd = rfs_image|default("initramfs-boot-image-" + yocto_machine + ".gz") %}
-{%- set initrd_compression = initrd_compression|default(initrd|get_extension) %}
+    {%- set initrd = rfs_image|default("initramfs-boot-image-" + yocto_machine + ".gz") %}
 {%- endif %}
-{%- if initrd %}
+
+{%- set initrd_compression = (initrd|get_extension) %}
 {%- set initrd_url = initrd_url|default(baseurl(initrd)) %}
+
+{%- if modules %}
+    {%- set modules_compression = (modules|get_extension) %}
+    {%- set modules_url = modules_url|default(baseurl(modules)) %}
 {%- endif %}
+
+{%- if dtb %}
+    {%- set dtb_url = dtb_url|default(baseurl(dtb)) %}
+{%- endif %}
+
 {%- block job %}
 {%- endblock %}

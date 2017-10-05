@@ -24,13 +24,12 @@ protocols:
       url: {{ kernel_url }}
 {%- if rootfs_type == 'nbd' %}
     initrd:
-      url: {{ nbdinitrd_url }}
+      url: {{ initrd_url }}
       allow_modify: false
     nbdroot:
-      url: {{ nbdroot_url }}
-      compression: {{ nbdroot_compression }}
-{%- endif %}
-{%- if initrd_url and rootfs_type != 'nbd' %}
+      url: {{ rootfs_url }}
+      compression: {{ rootfs_compression }}
+{%- elif rootfs_type == 'ramdisk' %}
     ramdisk:
       url: {{ initrd_url }}
       compression: {{ initrd_compression }}

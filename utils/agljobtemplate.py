@@ -60,7 +60,8 @@ class Agljobtemplate(object):
         return self.RFS_TYPE
 
     def render_job(self, url, machine, job_name="AGL-short-smoke", priority="medium", tests=[], rfs_type=None,
-                   kci_callback=None, rfs_image=None, build_version=None):
+                   kci_callback=None, rfs_image=None, kernel_image=None, dtb_image=None, modules_image=None,
+                   build_version=None):
         test_templates = []
 
         if machine not in self.machines:
@@ -88,6 +89,15 @@ class Agljobtemplate(object):
 
         if rfs_image is not None:
             job['rfs_image'] = rfs_image
+
+        if kernel_image is not None:
+            job['kernel_image'] = kernel_image
+
+        if dtb_image is not None:
+            job['dtb'] = dtb_image
+
+        if modules_image is not None:
+            job['modules'] = modules_image
 
         if kci_callback:
             if test_templates:

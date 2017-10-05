@@ -32,17 +32,18 @@ def parse_cmdline(machines, tests, rfs_types):
                         help='job id for link creation: URLBASE/JOB_ID')
     parser.add_argument('-i', '--jobidx', dest='job_index',  action='store',
                         help='job index for link creation: URLBASE/JOB_ID/JOB_INDEX', default='1')
-    parser.add_argument('--img-name', dest='img_name',  action='store',
-                        help="img base name (such as agl-demo-platform) - require img_ext")
-    parser.add_argument('--img-ext', dest='img_ext',  action='store',
-                        help="img extension (such as ext4.xz) - require img_name")
+    parser.add_argument('--rootfs-img', dest='rootfs_img',  action='store',
+                        help="The name of the root file system image (such as agl-demo-platform-raspberrypi3.ext4.xz)")
+    parser.add_argument('--kernel-img', dest='kernel_img',  action='store',
+                        help="The name of the kernel to boot (such as uImage)")
+    parser.add_argument('--dtb-img', dest='dtb_img',  action='store',
+                        help="The name of the dtb to use (such as uImage-bcm2710-rpi-3-b.dtb)")
+    parser.add_argument('--modules-img', dest='modules_img',  action='store',
+                        help="The name of the modules to use (such as modules.tar.xz)")
     parser.add_argument('--build-version', dest='build_version',  action='store',
                         help="the version number of the AGL build.")
 
     args = parser.parse_args()
-
-    if (not args.img_name) != (not args.img_ext):
-        parser.error("--img-name and --img-ext require one another")
 
     return args
 
@@ -52,9 +53,6 @@ def main():
     templates_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../templates')
     ajt = agljobtemplate.Agljobtemplate(templates_dir)
     args = parse_cmdline(ajt.machines, ajt.tests, ajt.rfs_types)
-
-    if args.img_name:
-        img = args.img_name + "-" + args.machine + "." + args.img_ext
 
     if args.tests is not None and 'all' in args.tests:
         args.tests = ajt.tests
@@ -69,7 +67,11 @@ def main():
 
     job = ajt.render_job(args.urlbase, args.machine, tests=args.tests, priority=args.priority,
                          rfs_type=args.rfs_type, job_name=args.job_name, kci_callback=args.callback,
-                         rfs_image=img, build_version=args.build_version)
+                         rfs_image=args.rootfs_img,
+                         kernel_image=args.kernel_img,
+                         dtb_image=args.dtb_img,
+                         modules_image=args.modules_img,
+                         build_version=args.build_version)
 
     if args.job_file is None:
         print job
