@@ -2,6 +2,8 @@
 {%- set deploy_to = "tmpfs" %}
 {%- set device_type = "qemu" %}
 {%- set kernel_image = "bzImage" %}
+{%- set device_arch = "x86_64" %}
+{%- set device_mach = "x86" %}
 {%- set qemu_arch = "x86_64" %}
 {%- set qemu_args = "-cpu qemu64,+ssse3,+sse4.1,+sse4.2,+popcnt -m 1048 -soundhw hda" %}
 {%- set qemu_cmdline = "console=ttyS0,115200 root=/dev/hda debug verbose" %}
