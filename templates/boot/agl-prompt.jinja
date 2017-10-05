@@ -1,5 +1,8 @@
 
-    prompts: ["root@{{ yocto_machine }}:~"]
+    prompts:
+      - "root@{{ yocto_machine }}:~"
+      - '/ #'
+
     auto_login:
       login_prompt: "login:"
       username: root
