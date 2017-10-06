@@ -10,6 +10,7 @@ protocols:
 {% endblock %}
 {%- block boot %}
 {{ super() }}
+    type: {{ uboot_type|default("bootm") }}
     commands: {{ boot_commands|default("ramdisk") }}
 {%- if rootfs_type == 'nbd' %}
     transfer_overlay:
@@ -21,7 +22,6 @@ protocols:
 {{ super() }}
     kernel:
       url: {{ kernel_url }}
-      type: {{ kernel_type }}
 {%- if rootfs_type == 'nbd' %}
     initrd:
       url: {{ initrd_url }}
