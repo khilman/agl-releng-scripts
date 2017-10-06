@@ -10,9 +10,9 @@ protocols:
 {% endblock %}
 {%- block boot %}
 {{ super() }}
-    type: {{ uboot_type|default("bootm") }}
     commands: {{ boot_commands|default("ramdisk") }}
 {%- if rootfs_type == 'nbd' %}
+    type: {{ uboot_type|default("bootm") }}
     transfer_overlay:
       download_command: wget
       unpack_command: tar -C / -xvpf
@@ -22,17 +22,18 @@ protocols:
 {{ super() }}
     kernel:
       url: {{ kernel_url }}
-{%- if rootfs_type == 'nbd' %}
+{%- if rootfs_type == 'ramdisk' %}
+      type: {{ kernel_type }}
+    ramdisk:
+      url: {{ initrd_url }}
+      compression: {{ initrd_compression }}
+{%- elif rootfs_type == 'nbd' %}
     initrd:
       url: {{ initrd_url }}
       allow_modify: false
     nbdroot:
       url: {{ rootfs_url }}
       compression: {{ rootfs_compression }}
-{%- elif rootfs_type == 'ramdisk' %}
-    ramdisk:
-      url: {{ initrd_url }}
-      compression: {{ initrd_compression }}
 {%- endif %}
 {%- if modules_url %}
     modules:
