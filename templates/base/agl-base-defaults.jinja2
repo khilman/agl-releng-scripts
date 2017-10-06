@@ -19,6 +19,16 @@
 {%- set vcs_branch = vcs_branch|default("agl-branch") %}
 {%- set vcs_url = vcs_url|default(baseurl()) %}
 
+{# Kernel type definition #}
+{%- if kernel_image|first|lower == "i" %}
+    {%- set kernel_type = "image" %}
+{%- elif kernel_image|first|lower == "z" %}
+    {%- set kernel_type = "zimage" %}
+{%- else %}
+    {%- set kernel_type = "uimage" %}
+{%- endif %}
+
+{# Image names definitions #}
 {%- if rootfs_type == 'nbd' %}
     {%- set initrd = initrd|default("initramfs-netboot-image-" + yocto_machine +".ext4.gz") %}
     {%- set boot_commands = "nbd" %}
