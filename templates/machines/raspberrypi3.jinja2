@@ -1,12 +1,12 @@
 {%- extends 'boot/generic-uboot-tftp.jinja2' %}
-{%- set device_arch = "arm64" %}
+{%- set device_arch = "arm" %}
 {%- set device_mach = "broadcom" %}
-{%- set device_type = "bcm2837-rpi-3-b" %}
+{%- set device_type = "bcm2837-rpi-3-b-32b" %}
 {# Default boot method if not specified #}
 {%- set rootfs_type = rootfs_type|default("nbd") %}
 {# Defaults image names dependng on boot method #}
 {%- if rootfs_type == 'nbd' %}
     {%- set initrd = "initramfs-netboot-image-" + yocto_machine +".ext4.gz.u-boot" %}
-{%- elif rootfs_type == 'ramdisk' %}
-    {%- set dtb = dtb|default("uImage-bcm2710-rpi-3-b.dtb") %}
 {%- endif %}
+{%- set dtb = dtb|default("uImage-bcm2710-rpi-3-b.dtb") %}
+{%- set rfs_image = rfs_image|default("agl-demo-platform-raspberrypi3.ext4.xz") %}
