@@ -3,21 +3,25 @@
 
 import agljobtemplate
 import argparse
-import urlparse
 import os
 
 def parse_cmdline(machines, tests, rfs_types):
     parser = argparse.ArgumentParser(description="AGL create job",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--version', '-v', action='version', version='%(prog)s 1.0')
-    parser.add_argument('machine',  action='store', choices=machines,
-                        help="machine to generate the job for")
+    parser.add_argument('-v', action='version', version='%(prog)s 1.0')
+    parser.add_argument('--machine',  action='store', choices=machines,
+                        help="machine to generate the job for",
+                        required=True)
     parser.add_argument('--priority', '-p', action='store', dest='priority',
                         help="job priority",
                         default='medium')
-    parser.add_argument('--urlbase', '-u', action='store', dest='urlbase',
+    parser.add_argument('--url', '-u', action='store', dest='url',
                         help="url fetch base",
-                        default='https://download.automotivelinux.org/AGL/upload/ci/')
+                        default='release')
+    parser.add_argument('--branch', '--changeid', dest='url_branch',  action='store',
+                        help='The branch (or changeid) to generate the job for.')
+    parser.add_argument('--version', '--patchset', dest='url_version',  action='store',
+                        help='The version (or patchset) to generate the job for.')
     parser.add_argument('--boot', action='store', dest='rfs_type',
                         choices=rfs_types, help='select boot type')
     parser.add_argument('--callback', action='store', dest='callback',
@@ -28,10 +32,6 @@ def parse_cmdline(machines, tests, rfs_types):
                         help="destination file")
     parser.add_argument('-n', '--name', dest='job_name',  action='store',
                         help="job name", default='AGL-short-smoke-wip')
-    parser.add_argument('-j', '--jobid', dest='job_id',  action='store',
-                        help='job id for link creation: URLBASE/JOB_ID')
-    parser.add_argument('-i', '--jobidx', dest='job_index',  action='store',
-                        help='job index for link creation: URLBASE/JOB_ID/JOB_INDEX', default='1')
     parser.add_argument('--rootfs-img', dest='rootfs_img',  action='store',
                         help="The name of the root file system image (such as agl-demo-platform-raspberrypi3.ext4.xz)")
     parser.add_argument('--kernel-img', dest='kernel_img',  action='store',
@@ -45,6 +45,19 @@ def parse_cmdline(machines, tests, rfs_types):
 
     args = parser.parse_args()
 
+    if (args.url == 'release'):
+        if (args.url_branch is None) and (args.url_version is None):
+            args.url = 'default'
+        elif (args.url_branch is not None) != (args.url_version is not None):
+            parser.error("Both arguments: '--branch' and '--version' needs to be set")
+    elif (args.url == 'daily'):
+        if (not args.url_branch) or (not args.url_version):
+            parser.error("The argument '--url daily' requires '--branch' and '--version' to be set")
+    elif (args.url == 'ci'):
+        if (not args.url_branch) or (not args.url_version):
+            parser.error("The argument '--url ci' requires '--changeid' and '--patchset' to be set. "
+                         + "For more information on how to use patchset and changeid use --help.")
+
     return args
 
 
@@ -57,15 +70,8 @@ def main():
     if args.tests is not None and 'all' in args.tests:
         args.tests = ajt.tests
 
-    if args.job_id is not None:
-        args.urlbase = urlparse.urljoin(args.urlbase, args.job_id + '/')
-        args.job_name += ' - {}'.format(args.job_id)
-
-        if args.job_index is not None:
-            args.urlbase = urlparse.urljoin(args.urlbase, args.job_index)
-            args.job_name += ' - {}'.format(args.job_index)
-
-    job = ajt.render_job(args.urlbase, args.machine, tests=args.tests, priority=args.priority,
+    job = ajt.render_job(url=args.url, url_branch=args.url_branch, url_version=args.url_version,
+                         machine=args.machine, tests=args.tests, priority=args.priority,
                          rfs_type=args.rfs_type, job_name=args.job_name, kci_callback=args.callback,
                          rfs_image=args.rootfs_img,
                          kernel_image=args.kernel_img,

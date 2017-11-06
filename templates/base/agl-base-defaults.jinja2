@@ -1,12 +1,11 @@
 {%- macro baseurl(object) -%}
-{{ urlbase }}/{{ dl_dir }}/{{ object }}
+{{ urlbase }}/{{ object }}
 {%- endmacro %}
 {%- set action_timeout = action_timeout|default(15) %}
 {%- set boot_timeout = boot_timeout|default(10) %}
 {%- set connection_timeout = connection_timeout|default(5) %}
 {%- set deploy_timeout = deploy_timeout|default(15) %}
 {%- set device_type = device_type|default(yocto_machine+"-uboot") %}
-{%- set dl_dir = dl_dir|default(yocto_machine) %}
 {%- set image_type = image_type|default("AGL") %}
 {%- set job_timeout = job_timeout|default(30) %}
 {%- set kernel_defconfig = kernel_defconfig|default("defconfig+CONFIG_AGL=y") %}

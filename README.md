@@ -9,6 +9,9 @@ for submitting jobs.
 
 ## Prerequisites
 - Python >= 2.7.1
+- jinja >= 2.9
+    - You can check if a version is/was installed with pip using: ```pip show jinja2```
+    - If the version is too old, you can update it using: ```sudo pip install --upgrade jinja2```
 
 ## Usage instructions
 The tool for generating job is located in the ./utils folder, it is named "create-jobs.py".
@@ -18,26 +21,43 @@ The tool for generating job is located in the ./utils folder, it is named "creat
 Command line tool to generate AGL jobs for LAVA.
 
 ##### Required arguments:
-- Machine name
+- ```./utils/create-jobs.py --machine machine-name```
+    - Available machine names: ```{dra7xx-evm,qemux86-64,porter,m3ulcb,raspberrypi3}```
+    - For an up to date list of machine names run: ```./utils/create-jobs.py --help```
 
 ##### Artifacts fetching from URL:
-The tool will create an URL to fetch the build artifacts as follows: "URL_BASE/MACHINE_NAME".
+Amongst other things, this tool is used to generate URLs for fetching build artifacts from specific locations.\
+The default location is: https://download.automotivelinux.org/AGL/\
+The default build is dab version 4.0.2
 
-Optionnal extra parameters can be used to extend the URL_BASE: `--jobid` and `--jobidx`.
-The fetching URL will then be constructed like this: "URL_BASE/JOB_ID/JOB_INDEX/MACHINE_NAME"
+The user can override these defaults using the command line:
+- ```--url <release, daily, ci or http://my-custom-url....>```
+    - Available url options and their corresponding URL:
+        - release: https://download.automotivelinux.org/AGL/release/
+        - daily: https://download.automotivelinux.org/AGL/snapshots/
+        - ci: https://download.automotivelinux.org/AGL/upload/ci/
 
+If using the url argument the user has to specify other arguments depending on the url:
+- release: ```--branch and --version```
+- daily: ```--branch and --version```
+- ci: ```--changeid and --patchset```
 
-The default URL_BASE is the AGL CI build repo.\
-The job id and index parameters sould be passed to create a valid fetching URL from this repo.\
-If using another URL these parameters can be omitted.
+If using a custom url these argument are not used and should not be set. The tool will suppose that the custom url points directly to build artifacts for the target machine.
 
-##### Example:
-From default URL (https://download.automotivelinux.org/AGL/upload/ci/):\
-`$ ./utils/create-jobs.py raspberrypi3 --jobid 10763 --jobidx 3`\
-From other URLs:\
-`$ ./utils/create-jobs.py raspberrypi3 --urlbase http://www.baylibre.com/pub/agl/ci/`\
-`$ ./utils/create-jobs.py raspberrypi3 --urlbase https://download.automotivelinux.org/AGL/snapshots/master/latest/raspberrypi3/deploy/images/`\
-`$ ./utils/create-jobs.py raspberrypi3 --urlbase https://download.automotivelinux.org/AGL/release/dab/4.0.0/raspberrypi3/deploy/images/`
-
+_Examples:_
+```
+./utils/create-jobs.py --machine m3ulcb
+./utils/create-jobs.py --machine qemux86-64
+./utils/create-jobs.py --url release --branch eel --version 4.99.1 --machine m3ulcb
+./utils/create-jobs.py --url release --branch eel --version 4.99.1 --machine qemux86-64
+./utils/create-jobs.py --url daily --branch master --version latest --machine m3ulcb
+./utils/create-jobs.py --url daily --branch master --version latest --machine raspberrypi3
+./utils/create-jobs.py --url ci --changeid 11533 --patchset 2 --machine raspberrypi3
+./utils/create-jobs.py --url ci --changeid 11533 --patchset 2 --machine m3ulcb
+./utils/create-jobs.py --url http://baylibre.com/pub/agl/ci/raspberrypi3 --machine raspberrypi3
+```
 The full list of arguments with default values is available using the helper:\
 `$ ./utils/create-jobs.py --help`
+
+##### Add tests to a job
+To add tests to a job description please refer to the specific documentation: [releng-scripts-folder]/doc/test-documentation.md
