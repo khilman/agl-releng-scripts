@@ -94,6 +94,10 @@ class Agljobtemplate(object):
             # If not a full url, read from config file
             url_base, infra = parse_url_file(self._template_path, 'default.cfg', url)
             if infra == 'AGL':
+                # If not set, create a build_version from other args
+                if (not build_version) and (url_branch) and (url_version):
+                    build_version = 'AGL-' + url + '-' + url_branch + '-' + url_version
+
                 url_fragment = ''
                 if (url != 'default'):
                     url_fragment += url_branch + '/' + url_version + '/'
@@ -111,9 +115,6 @@ class Agljobtemplate(object):
         job['urlbase'] = url
 
         job['test_templates'] = test_templates
-
-        if (not build_version) and (url_branch) and (url_version):
-            build_version = 'AGL-' + url + '-' + url_branch + '-' + url_version
 
         if build_version is not None:
             job['kernel_version'] = build_version
