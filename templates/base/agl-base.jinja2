@@ -3,7 +3,7 @@
 {%- block metadata %}
 {% include 'base/agl-metadata.jinja2' %}
 {% endblock %}
-{% if callback_name %}
+{% if do_callback %}
 {% include 'base/agl-callback.jinja2' %}
 {% endif %}
 {%- block main %}

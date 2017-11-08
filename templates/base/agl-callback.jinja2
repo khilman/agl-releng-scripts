@@ -3,7 +3,7 @@ notify:
   criteria:
     status: finished
   callback:
-    url: {{ backend_fqdn }}/callback/{{ callback_name }}?lab_name={{ lab_name }}&status={STATUS}&status_string={STATUS_STRING}
+    url: {{ backend_fqdn }}/callback/lava/test?lab_name={{ lab_name }}&status={STATUS}&status_string={STATUS_STRING}
     method: POST
     dataset: all
     token: {{ lab_token }}

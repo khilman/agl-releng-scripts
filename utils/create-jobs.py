@@ -24,8 +24,12 @@ def parse_cmdline(machines, tests, rfs_types):
                         help='The version (or patchset) to generate the job for.')
     parser.add_argument('--boot', action='store', dest='rfs_type',
                         choices=rfs_types, help='select boot type')
-    parser.add_argument('--callback', action='store', dest='callback',
-                        help='url to notify when job is done. Please read: ./templates/callback/callback_readme.txt')
+    parser.add_argument('--callback-from', action='store', dest='callback_from',
+                        help='The LAVA lab (name) that will be responsible of doing the callback. '
+                        'Please read: ./templates/callback/callback_readme.txt')
+    parser.add_argument('--callback-to', action='store', dest='callback_to',
+                        help='The KernelCI instance (name) that will receive the callback from LAVA. '
+                        'Please read: ./templates/callback/callback_readme.txt')
     parser.add_argument('--test', dest='tests',  action='store', choices=tests + ['all'],
                         help="add these test to the job", nargs='*', default=[])
     parser.add_argument('-o', '--output', dest='job_file',  action='store',
@@ -72,7 +76,8 @@ def main():
 
     job = ajt.render_job(url=args.url, url_branch=args.url_branch, url_version=args.url_version,
                          machine=args.machine, tests=args.tests, priority=args.priority,
-                         rfs_type=args.rfs_type, job_name=args.job_name, kci_callback=args.callback,
+                         rfs_type=args.rfs_type, job_name=args.job_name,
+                         lava_callback=args.callback_from, kci_callback=args.callback_to,
                          rfs_image=args.rootfs_img,
                          kernel_image=args.kernel_img,
                          dtb_image=args.dtb_img,

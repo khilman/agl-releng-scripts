@@ -20,15 +20,21 @@ def parse_url_file(template_path, url_file, url_type):
     except IOError:
         raise IOError, "Unable to read from file {}".format(url_file_path)
 
-def parse_callback_file(template_path, callback_file, job):
-    callback_file_path = template_path + '/callback/' + callback_file + '.cfg'
+def parse_callback_file(template_path, lava_callback, kci_callback):
+    callback_file_path = template_path + '/callback/' + lava_callback + '.cfg'
     try:
         with open(callback_file_path):
             cfg = ConfigParser.ConfigParser()
             cfg.read(callback_file_path)
-            job['backend_fqdn'] = cfg.get('default', 'backend_fqdn')
-            job['lab_name'] = cfg.get('default', 'lab_name')
-            job['lab_token'] = cfg.get('default', 'lab_token')
+            if kci_callback is None:
+                kci_callback = cfg.get('default', 'section')
+            cb_data = dict(cfg.items(kci_callback))
+            return cb_data
+    except ConfigParser.NoSectionError:
+        str_err = "Please make sure: --callback-to " + kci_callback
+        str_err += " is correct and corresponds to a section in: "
+        str_err += lava_callback + ".cfg"
+        raise ConfigParser.NoSectionError, str_err
     except IOError:
         raise IOError, "Unable to read from file {}".format(callback_file_path)
 
@@ -71,7 +77,8 @@ class Agljobtemplate(object):
 
     def render_job(self, url, machine, url_branch=None, url_version=None,
                    job_name="AGL-short-smoke", priority="medium", tests=[], rfs_type=None,
-                   kci_callback=None, rfs_image=None, kernel_image=None, dtb_image=None, modules_image=None,
+                   lava_callback=None, kci_callback=None,
+                   rfs_image=None, kernel_image=None, dtb_image=None, modules_image=None,
                    build_version=None):
         test_templates = []
 
@@ -134,12 +141,10 @@ class Agljobtemplate(object):
         if modules_image is not None:
             job['modules'] = modules_image
 
-        if kci_callback:
-            if test_templates:
-                job['callback_name'] = 'lava/test'
-            else:
-                job['callback_name'] = 'lava/boot'
-            parse_callback_file(self._template_path, kci_callback, job)
+        if lava_callback:
+            job['do_callback'] = True
+            callback_data = parse_callback_file(self._template_path, lava_callback, kci_callback)
+            job.update(callback_data)
 
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(self._template_path))
         env.filters['get_extension'] = get_extension
