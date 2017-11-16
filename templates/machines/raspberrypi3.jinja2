@@ -1,7 +1,7 @@
 {%- extends 'boot/generic-uboot-tftp.jinja2' %}
 {%- set device_arch = "arm" %}
 {%- set device_mach = "broadcom" %}
-{%- set device_type = "bcm2837-rpi-3-b-32b" %}
+{%- set device_type = "raspberrypi3" %}
 {# Default boot method if not specified #}
 {%- set rootfs_type = rootfs_type|default("nbd") %}
 {# Defaults image names dependng on boot method #}
