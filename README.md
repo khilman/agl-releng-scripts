@@ -1,4 +1,5 @@
 # releng-scripts
+---
 This is an AGL job generation tool for [LAVA](https://staging.validation.linaro.org/static/docs/v2/).\
 It is written in Python and uses jinja2 templates to generate yaml job files
 following the LAVA specifications.
@@ -14,10 +15,47 @@ for submitting jobs.
     - If the version is too old, you can update it using: ```sudo pip install --upgrade jinja2```
 
 ## Usage instructions
-The tool for generating job is located in the ./utils folder, it is named "create-jobs.py".
+The repo contains several tools that are located in the "./utils" folder.\
+Following is a list of the available tools:
+- `job-prereq.py` a tool that prints the binary packages needed to create a LAVA jobs
+- `create-jobs.py` a tool for generating lava job templates from binary packages hosted on the web
 
-### create-jobs.py
+### `job-prereq.py`
+Command line tool that prints the packages needed by LAVA to execute a test job.
 
+#### Required arguments:
+- `--machine`
+    - Available machine names: ```{dra7xx-evm,qemux86-64,porter,m3ulcb,raspberrypi3}```
+        - For an up to date list of machine names run: ```./utils/create-jobs.py --help```
+- `--build-type`
+    - Needs three arguments formatted as follow: `{build-type-name,branch,version}`.
+        - the build `build-type-name` must be one of: ci, daily, weekly, release.
+        - the build `branch` or `changeid` must be a branch name or changeid number.
+        - the build `version` or `patchset` must be the version or patchset number.
+
+#### Optionnal arguments
+- `--dtb`
+    - prints to stdout the needed `dtb` package name to create this specific LAVA job definition.
+- `--kernel`
+    - prints to stdout the needed `kernel` package name to create this specific LAVA job definition.
+- `--initrd`
+    - prints to stdout the needed `ramdisk` package name to create this specific LAVA job definition.
+- `--nbdroot`
+    - prints to stdout the needed `root file system` package name to create this specific LAVA job definition.
+
+Exception: if the machine is `qemux86-64` only `--kernel` and `--initrd` optionnal arguments are available. As qemu LAVA jobs do not need a `dtb` or `nbdroot`.
+
+_Examples:_
+```bash
+./utils/job-prereq.py --machine qemux86-64 --build-type {ci,11524,2} --kernel --initrd
+./utils/job-prereq.py --machine raspberrypi3 --build-type {release,eel,v4.9.3} --kernel --initrd --nbdroot --dtb
+./utils/job-prereq.py --machine m3ulcb --build-type {daily,eel,v4.9.3} --kernel --dtb
+./utils/job-prereq.py --machine dra7xx-evm --build-type {ci,11524,2} --initrd --nbdroot
+./utils/job-prereq.py --machine porter --build-type {ci,11524,2} --kernel --initrd --nbdroot --dtb
+```
+
+
+### `create-jobs.py`
 Command line tool to generate AGL jobs for LAVA.
 
 ##### Required arguments:
@@ -45,7 +83,7 @@ If using the url argument the user has to specify other arguments depending on t
 If using a custom url these argument are not used and should not be set. The tool will suppose that the custom url points directly to build artifacts for the target machine.
 
 _Examples:_
-```
+```bash
 ./utils/create-jobs.py --machine m3ulcb
 ./utils/create-jobs.py --machine qemux86-64
 ./utils/create-jobs.py --url release --branch eel --version 4.99.1 --machine m3ulcb
