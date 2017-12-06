@@ -48,6 +48,10 @@ class Agljobtemplate(object):
     RFS_TYPE = ['nbd', 'ramdisk']
 
     def __init__(self, path=DEFAULT_PATH):
+        try:
+            from jinja2 import select_autoescape
+        except ImportError:
+            raise ImportError, "Please make sure your version of jinja2 is >= 2.9"
         self._template_path = os.path.normpath(path)
         if not (os.path.isdir(self._template_path) and os.access(self._template_path, os.F_OK)):
             raise OSError, "Cannot access {}".format(self._template_path)
