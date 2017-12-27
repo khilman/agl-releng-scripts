@@ -10,6 +10,7 @@ import urlparse
 def get_extension(path):
     return path.split('.')[-1]
 
+
 def parse_url_file(template_path, url_file, url_type):
     url_file_path = template_path + '/URLs/' + url_file
     try:
@@ -17,8 +18,9 @@ def parse_url_file(template_path, url_file, url_type):
             cfg = ConfigParser.ConfigParser()
             cfg.read(url_file_path)
             return cfg.get(url_type, 'urlbase'), cfg.get('infra', 'style')
-    except IOError:
-        raise IOError, "Unable to read from file {}".format(url_file_path)
+    except IOError as err:
+        raise err
+
 
 def parse_callback_file(template_path, lava_callback, kci_callback):
     callback_file_path = template_path + '/callback/' + lava_callback + '.cfg'
@@ -39,6 +41,7 @@ def parse_callback_file(template_path, lava_callback, kci_callback):
         str_err += "[releng-scripts]/templates/callback/{}.cfg".format(lava_callback)
         raise IOError(err, str_err)
 
+
 class Agljobtemplate(object):
 
     DEFAULT_PATH = "templates"
@@ -51,13 +54,13 @@ class Agljobtemplate(object):
         try:
             from jinja2 import select_autoescape
         except ImportError:
-            raise ImportError, "Please make sure your version of jinja2 is >= 2.9"
+            raise ImportError("Please make sure your version of jinja2 is >= 2.9")
         self._template_path = os.path.normpath(path)
         if not (os.path.isdir(self._template_path) and os.access(self._template_path, os.F_OK)):
-            raise OSError, "Cannot access {}".format(self._template_path)
+            raise OSError("Cannot access {}".format(self._template_path))
 
         if self.machines is None:
-            raise RuntimeError, "No machine directory found at {}".format(self._template_path)
+            raise RuntimeError("No machine directory found at {}".format(self._template_path))
 
     def __list_jinjas(self, directory):
         d = os.path.join(self._template_path, directory)
@@ -87,13 +90,13 @@ class Agljobtemplate(object):
         test_templates = []
 
         if machine not in self.machines:
-            raise RuntimeError, "{} is not a available machine".format(machine)
+            raise RuntimeError("{} is not a available machine".format(machine))
 
         for t in tests:
             if t in self.tests:
                 test_templates.append(os.path.join(self.TESTS_DIR, t + '.jinja2'))
             else:
-                raise RuntimeError, "{} is not an available test".format(t)
+                raise RuntimeError("{} is not an available test".format(t))
 
         # Populate jinja substitution dict
         job = {}
