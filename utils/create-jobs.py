@@ -49,6 +49,9 @@ def parse_cmdline(machines, tests, rfs_types):
 
     args = parser.parse_args()
 
+    if (bool(args.callback_from) ^ bool(args.callback_to)):
+        parser.error("To specify callbacks both '--callback-to' and '--callback-from' are mandatory.")
+
     if (args.url == 'release'):
         if (args.url_branch is None) and (args.url_version is None):
             args.url = 'default'

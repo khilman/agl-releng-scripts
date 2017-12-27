@@ -30,14 +30,14 @@ def parse_callback_file(template_path, lava_callback, kci_callback):
                 kci_callback = cfg.get('default', 'section')
             cb_data = dict(cfg.items(kci_callback))
             return cb_data
-    except ConfigParser.NoSectionError:
-        str_err = "Please make sure: --callback-to " + kci_callback
-        str_err += " is correct and corresponds to a section in: "
-        str_err += lava_callback + ".cfg"
-        raise ConfigParser.NoSectionError, str_err
-    except IOError:
-        raise IOError, "Unable to read from file {}".format(callback_file_path)
-
+    except (ConfigParser.NoSectionError) as err:
+        str_err = "'--callback-to {}': must correspond to a section [{}] in the file '{}.cfg'".format(
+            kci_callback, kci_callback, lava_callback)
+        raise ConfigParser.NoSectionError(str_err)
+    except (IOError) as err:
+        str_err = "\n'--callback-from {}': must correspond to a file located in: ".format(lava_callback)
+        str_err += "[releng-scripts]/templates/callback/{}.cfg".format(lava_callback)
+        raise IOError(err, str_err)
 
 class Agljobtemplate(object):
 
