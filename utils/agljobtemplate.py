@@ -98,6 +98,7 @@ class Agljobtemplate(object):
         job['name'] = job_name
         job['yocto_machine'] = machine
         job['priority'] = priority
+        job['build_type'] = build_type
 
         defaults, infra = parse_cfg_file(self._template_path, 'default.cfg', build_type)
 

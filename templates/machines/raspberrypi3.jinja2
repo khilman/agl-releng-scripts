@@ -9,4 +9,8 @@
     {%- set initrd = "initramfs-netboot-image-" + yocto_machine +".ext4.gz.u-boot" %}
 {%- endif %}
 {%- set dtb = dtb|default("uImage-bcm2710-rpi-3-b.dtb") %}
-{%- set rfs_image = rfs_image|default("agl-demo-platform-raspberrypi3.ext4.xz") %}
+{%- if build_type == 'daily' %}
+    {%- set rfs_image = rfs_image|default("agl-demo-platform-crosssdk-raspberrypi3.ext4.xz") %}
+{%- else %}
+    {%- set rfs_image = rfs_image|default("agl-demo-platform-raspberrypi3.ext4.xz") %}
+{%- endif %}
