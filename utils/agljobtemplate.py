@@ -11,13 +11,18 @@ def get_extension(path):
     return path.split('.')[-1]
 
 
-def parse_url_file(template_path, url_file, url_type):
+def parse_url_file(template_path, url_file, build_type):
     url_file_path = template_path + '/URLs/' + url_file
     try:
         with open(url_file_path):
             cfg = ConfigParser.ConfigParser()
             cfg.read(url_file_path)
-            return cfg.get(url_type, 'urlbase'), cfg.get('infra', 'style')
+            config = cfg.items(build_type)
+            for section in config:
+                if section[0] == "test_plan":
+                    print section[1]
+            print build_type
+            return cfg.get(build_type, 'urlbase'), cfg.get('infra', 'style')
     except IOError as err:
         raise err
 
@@ -86,6 +91,7 @@ class Agljobtemplate(object):
                    job_name="AGL-short-smoke", priority="medium", tests=[], rfs_type=None,
                    lava_callback=None, kci_callback=None,
                    rfs_image=None, kernel_image=None, dtb_image=None, modules_image=None,
+                   build_type=None,
                    build_version=None):
         test_templates = []
 
@@ -104,16 +110,16 @@ class Agljobtemplate(object):
         job['yocto_machine'] = machine
         job['priority'] = priority
 
-        if url[:4] != 'http':
-            # If not a full url, read from config file
-            url_base, infra = parse_url_file(self._template_path, 'default.cfg', url)
+        # If the user doesn't specify an URL, use the default one from the build-type
+        if url is None:
+            url_base, infra = parse_url_file(self._template_path, 'default.cfg', build_type)
             if infra == 'AGL':
                 # If not set, create a build_version from other args
                 if (not build_version) and (url_branch) and (url_version):
-                    build_version = 'AGL-' + url + '-' + url_branch + '-' + url_version
+                    build_version = 'AGL-' + build_type + '-' + url_branch + '-' + url_version
 
                 url_fragment = ''
-                if (url != 'default'):
+                if (build_type != 'default'):
                     url_fragment += url_branch + '/' + url_version + '/'
 
                 if (machine == 'm3ulcb') or (machine == 'porter'):
@@ -121,7 +127,7 @@ class Agljobtemplate(object):
                 else:
                     url_fragment += machine
 
-                if (url != 'ci'):
+                if (build_type != 'ci'):
                     url_fragment += '/deploy/images/' + machine
 
                 url = urlparse.urljoin(url_base, url_fragment)
