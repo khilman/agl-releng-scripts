@@ -68,9 +68,6 @@ def main():
     ajt = agljobtemplate.Agljobtemplate(templates_dir)
     args = parse_cmdline(ajt.machines, ajt.tests, ajt.rfs_types)
 
-    if args.tests is not None and 'all' in args.tests:
-        args.tests = ajt.tests
-
     job = ajt.render_job(url=args.url, url_branch=args.url_branch, url_version=args.url_version,
                          machine=args.machine, tests=args.tests, priority=args.priority,
                          rfs_type=args.rfs_type, job_name=args.job_name,

@@ -5,24 +5,20 @@ import os
 import jinja2
 import ConfigParser
 import urlparse
+import ast
 
 
 def get_extension(path):
     return path.split('.')[-1]
 
 
-def parse_url_file(template_path, url_file, build_type):
-    url_file_path = template_path + '/URLs/' + url_file
+def parse_cfg_file(template_path, cfg_file, build_type):
+    url_file_path = template_path + '/config/' + cfg_file
     try:
         with open(url_file_path):
             cfg = ConfigParser.ConfigParser()
             cfg.read(url_file_path)
-            config = cfg.items(build_type)
-            for section in config:
-                if section[0] == "test_plan":
-                    print section[1]
-            print build_type
-            return cfg.get(build_type, 'urlbase'), cfg.get('infra', 'style')
+            return cfg.items(build_type), cfg.get('infra', 'style')
     except IOError as err:
         raise err
 
@@ -93,16 +89,9 @@ class Agljobtemplate(object):
                    rfs_image=None, kernel_image=None, dtb_image=None, modules_image=None,
                    build_type=None,
                    build_version=None):
-        test_templates = []
 
         if machine not in self.machines:
             raise RuntimeError("{} is not a available machine".format(machine))
-
-        for t in tests:
-            if t in self.tests:
-                test_templates.append(os.path.join(self.TESTS_DIR, t + '.jinja2'))
-            else:
-                raise RuntimeError("{} is not an available test".format(t))
 
         # Populate jinja substitution dict
         job = {}
@@ -110,10 +99,15 @@ class Agljobtemplate(object):
         job['yocto_machine'] = machine
         job['priority'] = priority
 
+        defaults, infra = parse_cfg_file(self._template_path, 'default.cfg', build_type)
+
         # If the user doesn't specify an URL, use the default one from the build-type
         if url is None:
-            url_base, infra = parse_url_file(self._template_path, 'default.cfg', build_type)
             if infra == 'AGL':
+                url_base = ''
+                for section in defaults:
+                    if section[0] == "urlbase":
+                        url_base = section[1]
                 # If not set, create a build_version from other args
                 if (not build_version) and (url_branch) and (url_version):
                     build_version = 'AGL-' + build_type + '-' + url_branch + '-' + url_version
@@ -131,6 +125,22 @@ class Agljobtemplate(object):
                     url_fragment += '/deploy/images/' + machine
 
                 url = urlparse.urljoin(url_base, url_fragment)
+
+        test_templates = []
+        # If the user doesn't specify tests, use the default ones from the build-type
+        if not tests:
+            if infra == 'AGL':
+                for section in defaults:
+                    if section[0] == "test_plan":
+                        tests = ast.literal_eval(section[1])
+
+        if 'all' in tests:
+            tests = self.tests
+        for t in tests:
+            if t in self.tests:
+                test_templates.append(os.path.join(self.TESTS_DIR, t + '.jinja2'))
+            else:
+                raise RuntimeError("{} is not an available test".format(t))
 
         job['urlbase'] = url
 
