@@ -3,6 +3,7 @@
 {%- endmacro %}
 {%- set action_timeout = action_timeout|default(15) %}
 {%- set boot_timeout = boot_timeout|default(10) %}
+{%- set build_type = build_type|default("default") %}
 {%- set connection_timeout = connection_timeout|default(5) %}
 {%- set deploy_timeout = deploy_timeout|default(15) %}
 {%- set device_type = device_type|default(yocto_machine+"-uboot") %}

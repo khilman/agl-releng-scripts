@@ -86,13 +86,14 @@ _Examples:_
 ```bash
 ./utils/create-jobs.py --machine m3ulcb
 ./utils/create-jobs.py --machine qemux86-64
-./utils/create-jobs.py --url release --branch eel --version 4.99.1 --machine m3ulcb
-./utils/create-jobs.py --url release --branch eel --version 4.99.1 --machine qemux86-64
-./utils/create-jobs.py --url daily --branch master --version latest --machine m3ulcb
-./utils/create-jobs.py --url daily --branch master --version latest --machine raspberrypi3
-./utils/create-jobs.py --url ci --changeid 11533 --patchset 2 --machine raspberrypi3
-./utils/create-jobs.py --url ci --changeid 11533 --patchset 2 --machine m3ulcb
+./utils/create-jobs.py --build-type release --branch eel --version 4.99.1 --machine m3ulcb
+./utils/create-jobs.py --build-type release --branch eel --version 4.99.1 --machine qemux86-64
+./utils/create-jobs.py --build-type daily --branch master --version latest --machine m3ulcb
+./utils/create-jobs.py --build-type daily --branch master --version latest --machine raspberrypi3
+./utils/create-jobs.py --build-type ci --changeid 13079 --patchset 1 --machine raspberrypi3
+./utils/create-jobs.py --build-type ci --changeid 13079 --patchset 1 --machine m3ulcb
 ./utils/create-jobs.py --url http://baylibre.com/pub/agl/ci/raspberrypi3 --machine raspberrypi3
+./utils/create-jobs.py --url http://baylibre.com/pub/agl/ci/raspberrypi3 --build-type release --machine raspberrypi3
 ```
 The full list of arguments with default values is available using the helper:\
 `$ ./utils/create-jobs.py --help`
