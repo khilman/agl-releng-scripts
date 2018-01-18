@@ -83,7 +83,7 @@ class Agljobtemplate(object):
     def rfs_types(self):
         return self.RFS_TYPE
 
-    def render_job(self, url, machine, url_branch=None, url_version=None,
+    def render_job(self, machine, url=None, url_branch=None, url_version=None,
                    job_name="AGL-short-smoke", priority="medium", tests=[], rfs_type=None,
                    lava_callback=None, kci_callback=None,
                    rfs_image=None, kernel_image=None, dtb_image=None, modules_image=None,
