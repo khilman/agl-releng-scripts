@@ -46,7 +46,7 @@ def main():
     ajt = agljobtemplate.Agljobtemplate(templates_dir)
     args = parse_cmdline(ajt.machines)
 
-    job = ajt.render_job(url=args.build_type[0],
+    job = ajt.render_job(build_type=args.build_type[0],
                          url_branch=args.build_type[1],
                          url_version=args.build_type[2],
                          machine=args.machine)
