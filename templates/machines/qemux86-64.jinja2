@@ -6,7 +6,7 @@
 {%- set device_mach = "x86" %}
 {%- set qemu_arch = "x86_64" %}
 {%- set qemu_args = "-cpu qemu64,+ssse3,+sse4.1,+sse4.2,+popcnt -smp 2 -m 1048 -soundhw hda" %}
-{%- set qemu_cmdline = "console=ttyS0,115200 root=/dev/hda debug verbose" %}
+{%- set qemu_cmdline = "console=ttyS0,115200 root=/dev/hda debug verbose systemd.log_color=false " %}
 {%- set rootfs_type = rootfs_type|default("ramdisk") %}
 {%- if build_type == 'release' %}
     {%- set rfs_image = rfs_image|default("agl-demo-platform-crosssdk-qemux86-64.ext4.xz") %}
