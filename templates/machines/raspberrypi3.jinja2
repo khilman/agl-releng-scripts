@@ -1,7 +1,7 @@
 {%- extends 'boot/generic-uboot-tftp.jinja2' %}
 {%- set device_arch = "arm" %}
 {%- set device_mach = "broadcom" %}
-{%- set device_type = "raspberrypi3-uboot" %}
+{%- set device_type = "bcm2837-rpi-3-b-32" %}
 {# Default boot method if not specified #}
 {%- set rootfs_type = rootfs_type|default("nbd") %}
 {# Defaults image names dependng on boot method #}
@@ -14,3 +14,9 @@
 {%- else %}
     {%- set rfs_image = rfs_image|default("agl-demo-platform-raspberrypi3.ext4.xz") %}
 {%- endif %}
+
+{%- block main %}
+{{ super() }}
+context:
+  custom_kernel_args: "8250.nr_uarts=1 bcm2709.uart_clock=48000000 smsc95xx.macaddr=AA:BB:CC:DD:EE:AA"
+{% endblock %}
