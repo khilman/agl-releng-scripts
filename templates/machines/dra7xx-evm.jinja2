@@ -5,5 +5,10 @@
 {%- set dtb = dtb|default("zImage-dra7-evm-lcd-lg.dtb") %}
 {%- set kernel_image = kernel_image|default("zImage") %}
 {%- set rootfs_type = rootfs_type|default("nbd") %}
-{%- set rfs_image = rfs_image|default("agl-demo-platform-dra7xx-evm.ext4.xz") %}
+{%- if (build_type == 'daily') or (build_type == 'release') %}
+    {%- set rfs_image = rfs_image|default("agl-demo-platform-crosssdk-dra7xx-evm.ext4.xz") %}
+{%- else %}
+    {%- set rfs_image = rfs_image|default("agl-demo-platform-dra7xx-evm.ext4.xz") %}
+{%- endif %}
+    
 {%- set uboot_type = "bootz" %}
