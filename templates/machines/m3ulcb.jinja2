@@ -6,6 +6,4 @@
 {%- set kernel_image = kernel_image|default("Image") %}
 {%- set rootfs_type = rootfs_type|default("nbd") %}
 {%- set uboot_type = "booti" %}
-{%- if (build_type == 'daily') or (build_type == 'release') %}
-    {%- set rfs_image = rfs_image|default("agl-image-ivi-crosssdk-m3ulcb.ext4.xz") %}
-{%- endif %}
+{%- set rfs_image = rfs_image|default("agl-image-ivi-crosssdk-m3ulcb.ext4.xz") %}
