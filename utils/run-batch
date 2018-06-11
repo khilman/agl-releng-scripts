@@ -1,0 +1,25 @@
+#!/bin/bash
+
+RELENG=$HOME/work/agl/releng-scripts
+PATH=$PATH:$RELENG/utils
+
+#REL="--build-type release --branch dab --version 4.0.2"
+#TESTS="--test health-test"
+REL="--build-type release --branch eel --version 5.0.3"
+TESTS=""
+
+CALLBACK="--callback-from lab-baylibre-legacy"
+#CALLBACK+=" --callback-to Baylibre" # NOTE: needs "agl-jenkins" username
+CALLBACK+=" --callback-to Leiha" # NOTE: needs "admin" username
+
+for mach_tmpl in $RELENG/templates/machines/*.jinja2; do
+  machine=$(basename $mach_tmpl .jinja2)
+  if [ $machine = "porter" ]; then
+      continue
+  fi
+  job=job-$machine.yaml
+  
+  create-jobs.py --machine $machine -o $job $REL $TESTS $CALLBACK
+
+#  lavacli -i baylibre jobs submit $job
+done

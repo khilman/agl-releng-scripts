@@ -1,0 +1,17 @@
+#
+# Copy to ~/.config/lavacli.yaml
+#
+baylibre:
+  uri: http://lava.baylibre.com:10080/RPC2
+  username: admin
+  token: longrandomtokenadmin
+ 
+agl@baylibre:
+  uri: http://lava.baylibre.com:10080/RPC2
+  username: agl-jenkins
+  token: mnosrufap3uayj0rgqnutafwbussxt97p500t9pd875f2jhwwi2pnmnmkiwif5no404tfhg8d0nm16liqcjbdcps5zgobmu6zersz6i5il1l7yum4li3f9a5ii6qrd0p
+
+agl:
+  uri: https://lava.automotivelinux.org/RPC2
+  username: khilman
+  token: ws0syufteeanqmzdr1ub8lm06minadll7u4g708x2h1emksfire1xyt7qitnkxfsey4anda0us86iyh9c6id80bdpx0hiag0fo09d80ha951kszro3crbxfxlatzm8yb
