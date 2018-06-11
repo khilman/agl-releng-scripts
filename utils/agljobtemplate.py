@@ -99,7 +99,8 @@ class Agljobtemplate(object):
         job['yocto_machine'] = machine
         job['priority'] = priority
         job['build_type'] = build_type
-
+        job['image_type'] = "AGL-%s" % build_type
+        
         defaults, infra = parse_cfg_file(self._template_path, 'default.cfg', build_type)
 
         # If the user doesn't specify an URL, use the default one from the build-type
@@ -149,6 +150,12 @@ class Agljobtemplate(object):
 
         if build_version is not None:
             job['kernel_version'] = build_version
+
+        if url_version:
+            job['kernel_version'] = url_version
+            
+        if url_branch:
+            job['vcs_branch'] = url_branch
 
         if rfs_type is not None:
             job['rootfs_type'] = rfs_type
