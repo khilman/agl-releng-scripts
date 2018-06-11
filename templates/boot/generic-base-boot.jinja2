@@ -1,4 +1,13 @@
 {%- extends 'base/agl-simple.jinja2' %}
+{%- if rootfs_type == 'nbd' %}
+{%- block deploy %}
+{{ super() }}
+    protocols:
+      lava-xnbd:
+      - action: nbd-deploy
+        request: set_port
+{%- endblock %}
+{%- endif %}
 {%- block boot %}
 {{ super() }}
 - boot:
