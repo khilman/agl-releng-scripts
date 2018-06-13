@@ -18,5 +18,6 @@
 {%- block main %}
 {{ super() }}
 context:
+  console_device: ttyS0
   custom_kernel_args: "8250.nr_uarts=1 bcm2709.uart_clock=48000000 smsc95xx.macaddr=AA:BB:CC:DD:EE:AA"
 {% endblock %}
